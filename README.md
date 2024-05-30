@@ -8,7 +8,7 @@ To run this game on your local machine, you'll need to have Python installed. Yo
 
 1. Clone this repository to your local machine using:
    ```bash
-   git clone https://github.com/your-username/snake-game.git
+   git clone https://github.com/maklja/py-snake-game
    ```
 
 ## Usage
