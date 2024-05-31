@@ -9,6 +9,7 @@ class SnakeGame:
         self.score = 0
         self.snake = []
         self.screen = Screen()
+        self.screen.title("Snake game")
         self.screen.setup(600, 600)
         self.screen.bgcolor("black")
         self.tail_part_size = 20
@@ -89,32 +90,6 @@ class SnakeGame:
     def compare_positions(self, pos1, pos2):
         return pos1[0] == pos2[0] and pos1[1] == pos2[1]
 
-    def add_new_tail_part(self):
-        last_tail_part_pos = self.snake[len(self.snake) - 1].pos()
-        new_tail_part_spots = [
-            (last_tail_part_pos[0] +
-             self.tail_part_size, last_tail_part_pos[1]),
-            (last_tail_part_pos[0] -
-             self.tail_part_size, last_tail_part_pos[1]),
-            (last_tail_part_pos[0],
-             last_tail_part_pos[1] + self.tail_part_size),
-            (last_tail_part_pos[0],
-             last_tail_part_pos[1] - self.tail_part_size)
-        ]
-
-        for new_tail_pos in new_tail_part_spots:
-            is_free = True
-            for tail_part in self.snake:
-                tail_part_pos = tail_part.pos()
-                if self.compare_positions(new_tail_pos, tail_part_pos):
-                    is_free = False
-                    break
-
-            if is_free:
-                new_tail_part = self.create_part(new_tail_pos)
-                self.snake.append(new_tail_part)
-                return
-
     def collision_happened(self):
         head_pos = self.snake[0].pos()
         tail = slice(1, len(self.snake))
@@ -177,10 +152,6 @@ class SnakeGame:
             self.move_snake_tail_part(head.pos(), self.heading), self.heading
         )
         self.snake.insert(0, new_tail_part)
-
-        last_tail_part = self.snake.pop()
-        last_tail_part.hideturtle()
-        last_tail_part.clear()
         new_tail_part.showturtle()
 
         if self.collision_happened():
@@ -189,13 +160,16 @@ class SnakeGame:
 
         if self.has_collected_gift():
             self.update_score()
-            self.add_new_tail_part()
             self.gift.hideturtle()
             self.gift.clear()
             self.create_gift(
                 self.screen.window_width(), self.screen.window_height())
+        else:
+            last_tail_part = self.snake.pop()
+            last_tail_part.hideturtle()
+            last_tail_part.clear()
 
-        self.screen.ontimer(lambda: self.next_frame(), 100)
+        self.screen.ontimer(lambda: self.next_frame(), 50)
 
 
 game = SnakeGame()
